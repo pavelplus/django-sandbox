@@ -1,12 +1,15 @@
-from django.forms import ModelForm
-from django.forms.renderers import DjangoTemplates
+from django.forms import ModelForm, DateInput
 
 from .models import Person
 
 
-renderer = DjangoTemplates
+""" class DateInput(DateInput):
+    input_type = 'date' """
 
 class PersonForm(ModelForm):
     class Meta:
         model = Person
         fields = ['name', 'sex', 'birth_date', 'email', 'phone_number', 'notes']
+        widgets = {
+            'birth_date': DateInput(attrs={'type': 'date'}),
+        }
