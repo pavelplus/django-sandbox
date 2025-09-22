@@ -9,7 +9,13 @@
 
   {% for person in persons %}
     <div class="card my-2">
-      <h5 class="card-header">{{ person.name }}</h5>
+      <div class="card-header d-flex justify-content-between align-items-center">
+        {{ person.name }}
+        <div>
+          <a class="btn btn-sm" href="{% url "main:edit_person" person.id %}">редактировать</a>
+          <a class="btn btn-sm" href="{% url "main:delete_person" person.id %}" onclick="return window.confirm('Точно удалить?')">удалить</a>
+        </div>
+      </div>
       <div class="card-body">
         {% if person.birth_date %}
           <p class="card-text">{{ person.birth_date }}</p>
@@ -28,55 +34,8 @@
       </div>
     </div>
   {% endfor %}
-
-  <div class="row mt-3">
-    <form>
-      {% csrf_token %}
-      {{ form }}
-      <button type="submit">Сохранить</button>
-    </form>
+  <div class="d-flex justify-content-end">
+    <a href="{% url "main:create_person" %}" class="btn btn-primary">Создать</a>
   </div>
 
-  <hr />
-  <h2>django-bootstrap5</h2>
-
-  {% load django_bootstrap5 %}
-
-  {% bootstrap_messages %}
-
-  <div class="row mt-3 justify-content-center">
-    <form style="">
-      {% csrf_token %}
-      {% bootstrap_form form layout='horizontal' %}
-
-      {% bootstrap_field form.email layout='horizontal' %}
-
-      {% bootstrap_button button_type='submit' content='Сохранить' %}
-      {% bootstrap_button button_type='reset' button_class='btn-secondary' content='Отмена' %}
-    </form>
-  </div>
-
-  <hr />
-  <h2>django-widget-tweaks</h2>
-
-  {% load widget_tweaks %}
-
-  <div class="row mt-3 justify-content-center">
-    <form style="">
-      {% csrf_token %}
-      <div class="row mb-3">
-        <label class="col-sm-2 col-form-label" for={{ form.name.id_for_label }}>{{ form.name.label }}</label>
-        <div class="col-sm-10">
-          {% render_field form.name class="form-control" %}
-        </div>
-      </div>
-      <div class="row mb-3">
-        <label class="col-sm-2 col-form-label" for={{ form.birth_date.id_for_label }}>{{ form.birth_date.label }}</label>
-        <div class="col-sm-10">
-          {% render_field form.birth_date class="form-control" type="date" %}
-        </div>
-      </div>
-      <button class="btn btn-primary" type="submit">Сохранить</button>
-    </form>
-  </div>
 {% endblock %}
