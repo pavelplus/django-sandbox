@@ -1,5 +1,6 @@
 from django.shortcuts import redirect, get_object_or_404
 from django.template.response import TemplateResponse
+from django.http import Http404
 
 from .models import Person
 from .forms import PersonForm
@@ -10,12 +11,10 @@ def index(request):
     return TemplateResponse(request, 'main/index.html', {})
 
 
-def person_database(request):
+def person_list(request):
     persons = Person.objects.all()
-    form = PersonForm()
     context = {
         'persons': persons,
-        'form': form,
     }
     return TemplateResponse(request, 'main/persons.html', context)
 
@@ -36,7 +35,6 @@ def person_create(request):
     return TemplateResponse(request, 'main/person_edit.html', context)
     
 
-
 def person_edit(request, id):
     person = get_object_or_404(Person, pk=id)
 
@@ -55,8 +53,10 @@ def person_edit(request, id):
     return TemplateResponse(request, 'main/person_edit.html', context)
 
 
-
-def person_delete(request, id):
-    person = get_object_or_404(Person, pk=id)
-    person.delete()
-    return redirect('main:persons')
+def person_delete(request):
+    if request.method == 'POST':
+        person = get_object_or_404(Person, pk=request.POST['person_id'])
+        person.delete()
+        return redirect('main:persons')
+    else:
+        raise Http404()

@@ -12,8 +12,11 @@
       <div class="card-header d-flex justify-content-between align-items-center">
         {{ person.name }}
         <div>
-          <a class="btn btn-sm" href="{% url "main:edit_person" person.id %}">редактировать</a>
-          <a class="btn btn-sm" href="{% url "main:delete_person" person.id %}" onclick="return window.confirm('Точно удалить?')">удалить</a>
+          <a class="btn btn-sm" href="{% url "main:edit_person" person.id %}"><i class="bi bi-pencil"></i> редактировать</a>
+          <form style="display: inline;" method="post" action="{% url "main:delete_person" %}">
+            {% csrf_token %}
+            <button class="btn btn-sm" type="submit" name="person_id" value="{{ person.id }}" onclick="return window.confirm('Точно удалить?')"><i class="bi bi-x-circle"></i> удалить</a>
+          </form>
         </div>
       </div>
       <div class="card-body">
@@ -34,8 +37,8 @@
       </div>
     </div>
   {% endfor %}
-  <div class="d-flex justify-content-end">
-    <a href="{% url "main:create_person" %}" class="btn btn-primary">Создать</a>
+  <div class="d-flex justify-content-start">
+    <a href="{% url "main:create_person" %}" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Создать</a>
   </div>
 
 {% endblock %}
